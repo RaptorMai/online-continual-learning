@@ -1,0 +1,6 @@
+parameters:
+  data: mini_imagenet
+  cl_type: ni
+  ns_factor: [0.0, 0.4, 0.8, 1.2, 1.6, 2.0, 2.4, 2.8, 3.2, 3.6]
+  ns_type: noise
+  data_name: mini_noise

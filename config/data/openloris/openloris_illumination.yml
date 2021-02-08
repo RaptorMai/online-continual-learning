@@ -1,0 +1,5 @@
+parameters:
+  data: openloris
+  cl_type: ni
+  ns_type: illumination
+  data_name: openloris_illum

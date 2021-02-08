@@ -1,0 +1,6 @@
+parameters:
+  data: cifar100
+  cl_type: ni
+  ns_factor: [0, 0.3, 0.4, 0.5, 0.6]
+  ns_type: occlusion
+  data_name: cifar100_occlusion

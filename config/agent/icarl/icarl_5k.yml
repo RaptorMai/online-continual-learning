@@ -1,0 +1,7 @@
+parameters:
+  agent: ICARL
+  update: random
+  retrieve: random
+  mem_size: 5000
+  eps_mem_batch: 10
+  model_name: ICARL_5k

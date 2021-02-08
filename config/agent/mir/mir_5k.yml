@@ -1,0 +1,7 @@
+parameters:
+  agent: ER
+  update: random
+  retrieve: MIR
+  mem_size: 5000
+  eps_mem_batch: 10
+  model_name: MIR_5k

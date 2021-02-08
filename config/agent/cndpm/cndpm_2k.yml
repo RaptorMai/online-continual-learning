@@ -1,0 +1,6 @@
+parameters:
+  agent: CNDPM
+  stm_capacity: 2000
+  weight_decay: 0.00001
+  eps_mem_batch: 10
+  model_name: CNDPM_2k

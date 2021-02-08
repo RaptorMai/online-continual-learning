@@ -1,0 +1,8 @@
+parameters:
+  agent: ER
+  update: GSS
+  retrieve: random
+  mem_size: 5000
+  eps_mem_batch: 10
+  gss_batch_size: 10
+  model_name: GSS_5k

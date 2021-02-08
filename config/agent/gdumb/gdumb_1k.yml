@@ -1,0 +1,7 @@
+parameters:
+  agent: GDUMB
+  mem_size: 1000
+  mem_epoch: 30
+  minlr: 0.0005
+  clip: 10.0
+  model_name: GDUMB_1k

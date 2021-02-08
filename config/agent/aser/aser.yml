@@ -1,0 +1,11 @@
+parameters:
+  agent: ER
+  update: ASER
+  retrieve: ASER
+  mem_size: 5000
+  eps_mem_batch: 10
+  aser_type: asv
+  n_smp_cls: 2.0
+  aux_smp_type: minority
+  threshold: rand
+  name: ER_ASER

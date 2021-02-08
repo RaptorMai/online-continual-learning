@@ -1,0 +1,4 @@
+parameters:
+  data: core50
+  cl_type: nicv2_79
+  data_name: core50_nicv2_79

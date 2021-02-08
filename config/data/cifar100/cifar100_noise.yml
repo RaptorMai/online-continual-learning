@@ -1,0 +1,6 @@
+parameters:
+  data: cifar100
+  cl_type: ni
+  ns_factor: [0, 0.6, 1.4, 2.2, 3]
+  ns_type: noise
+  data_name: cifar100_noise

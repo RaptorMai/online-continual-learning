@@ -1,0 +1,7 @@
+parameters:
+  agent: ER
+  update: random
+  retrieve: random
+  mem_size: 0
+  eps_mem_batch: 0
+  model_name: finetune

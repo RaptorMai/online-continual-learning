@@ -1,0 +1,6 @@
+parameters:
+  data: mini_imagenet
+  cl_type: ni
+  ns_factor: [0.0, 0.28, 0.56, 0.83, 1.11, 1.39, 1.67, 1.94, 2.22, 2.5]
+  ns_type: blur
+  data_name: mini_blur

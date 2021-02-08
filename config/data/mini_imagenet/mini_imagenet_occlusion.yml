@@ -1,0 +1,6 @@
+parameters:
+  data: mini_imagenet
+  cl_type: ni
+  ns_factor: [0.0, 0.07, 0.13, 0.2, 0.27, 0.33, 0.4, 0.47, 0.53, 0.6]
+  ns_type: occlusion
+  data_name: mini_occlusion

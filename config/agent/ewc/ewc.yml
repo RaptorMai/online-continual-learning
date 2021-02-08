@@ -1,0 +1,6 @@
+parameters:
+  agent: EWC
+  fisher_update_after: 50
+  alpha: 0.9
+  model_name: EWC
+

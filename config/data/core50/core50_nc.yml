@@ -1,0 +1,4 @@
+parameters:
+  data: core50
+  cl_type: nc
+  data_name: core50_nc

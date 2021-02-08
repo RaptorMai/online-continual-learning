@@ -1,0 +1,4 @@
+parameters:
+  data: cifar10
+  num_tasks: 5
+  cl_type: nc

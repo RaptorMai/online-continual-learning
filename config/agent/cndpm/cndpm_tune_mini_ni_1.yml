@@ -1,0 +1,4 @@
+parameters:
+  learning_rate: [0.1]
+  classifier_chill: [0.01]
+  log_alpha: [-2000, -500]

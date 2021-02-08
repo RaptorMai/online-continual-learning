@@ -1,0 +1,7 @@
+parameters:
+  agent: ER
+  update: random
+  retrieve: random
+  mem_size: 1000
+  eps_mem_batch: 10
+  model_name: Naive_ER_1k

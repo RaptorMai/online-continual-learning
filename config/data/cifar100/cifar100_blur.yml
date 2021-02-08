@@ -1,0 +1,6 @@
+parameters:
+  data: cifar100
+  cl_type: ni
+  ns_factor: [0, 0.6, 0.9, 1.2, 1.5]
+  ns_type: blur
+  data_name: cifar100_blur

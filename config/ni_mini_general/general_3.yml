@@ -1,0 +1,17 @@
+parameters:
+  #experiment
+  num_runs: 2
+  seed: 2
+  # optimizer
+  optimizer: SGD
+  epoch: 1
+  batch: 10
+  test_batch: 128
+  # validation
+  val_size: 0.0
+  num_val: 2
+  num_runs_val: 1
+  # data general
+  fix_order: False
+  plot_sample: False
+  online: True

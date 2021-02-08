@@ -1,0 +1,9 @@
+parameters:
+  num_runs: 2
+  seed: 0
+  optimizer: SGD
+  epoch: 1
+  batch: 10
+  test_batch: 128
+  num_val: 2
+  num_runs_val: 2
