@@ -116,143 +116,42 @@ def sorted_cand_ind(eval_df, cand_df, n_eval, n_cand):
     return sorted_cand_ind_
 
 
-class AuxSamplingManager:
-    def __init__(self, params):
-        self.device = "cuda" if torch.cuda.is_available() else "cpu"
-        self.mem_size = params.mem_size
-        self.num_tasks = params.num_tasks
-        self.out_dim = n_classes[params.data]
-        self.aux_smp_type = params.aux_smp_type
+def add_minority_class_input(cur_x, cur_y, mem_size, num_class):
+    """
+    Find input instances from minority classes, and concatenate them to evaluation data/label tensors later.
+    This facilitates the inclusion of minority class samples into memory when ASER's update method is used under online-class incremental setting.
 
-        # If auxiliary sampling manager type is "minority"
-        if self.aux_smp_type == "minority":
-            # Expected minimum number of samples per class
-            self.min_exp_n_per_cls = self.mem_size // self.out_dim
+    More details:
 
-        # If auxiliary sampling manager type is "accum"
-        if self.aux_smp_type == "accum":
-            # Number of unique class labels in split task
-            self.n_labels_per_split_task = self.out_dim // self.num_tasks
-            # All unique class labels in current task
-            self.cur_task_label_set = set()
-            # Number of current task labels seen so far
-            self.count_cur = 0
-            # Number of current task samples to be freely entered into memory from first encounter
-            self.accum_size = self.mem_size // self.out_dim * self.n_labels_per_split_task
+    Evaluation set may not contain any samples from minority classes (i.e., those classes with very few number of corresponding samples stored in the memory).
+    This happens after task changes in online-class incremental setting.
+    Minority class samples can then get very low or negative KNN-SV, making it difficult to store any of them in the memory.
 
-    def get_aux_samples(self, cur_x, cur_y, threshold):
-        """
-            Apply auxiliary sampling methods for ASER update to promote class balance in buffer.
-            Return evaluation set and candidate set for ASER update.
+    By identifying minority class samples in the current input batch, and concatenating them to the evaluation set,
+        KNN-SV of the minority class samples can be artificially boosted (i.e., positive value with larger magnitude).
+    This allows to quickly accomodate new class samples in the memory right after task changes.
 
-            In New Class scenario, this boosts SV of first few new task data.
-            Once their number exceeds threshold, manager stops.
-            Buffer is then class balanced, and fair SV comparison can be made afterwards.
+    Threshold for being a minority class is a hyper-parameter related to the class proportion.
+    In this implementation, it is randomly selected between 0 and 1 / number of all classes for each current input batch.
 
-            See accum_update and add_minority_class_input methods for details of accum and minority options.
-                Args:
-                    cur_x (tensor): current input data tensor.
-                    cur_y (tensor): current input label tensor.
-                Returns
-                    minority_batch_x (tensor): subset of current input data from minority class.
-                                                If minority is not selected, return None.
-                    minority_batch_y (tensor): subset of current input label from minority class.
-                                                If minority is not selected, return None.
-                    accum_excl_indices (set): indices of buffered instances from current task.
-                                                If accum is selected and activated, they are excluded from sampling.
-                                                Otherwise, return empty set.
-        """
-        accum_excl_indices = set()
-        minority_batch_x, minority_batch_y = None, None
-        # Run auxiliary sampling methods
-        if self.aux_smp_type == "accum":
-            accum_excl_indices = self.accum_update(cur_y)
-        else:
-            minority_batch_x, minority_batch_y = self.add_minority_class_input(cur_x, cur_y, threshold)
 
-        return minority_batch_x, minority_batch_y, accum_excl_indices
+        Args:
+            cur_x (tensor): current input data tensor.
+            cur_y (tensor): current input label tensor.
+            mem_size (int): memory size.
+            num_class (int): number of classes in dataset.
+        Returns
+            minority_batch_x (tensor): subset of current input data from minority class.
+            minority_batch_y (tensor): subset of current input label from minority class.
+"""
+    # Select input instances from minority classes that will be concatenated to pre-selected data
+    threshold = torch.tensor(1).float().uniform_(0, 1 / num_class).item()
 
-    def accum_update(self, cur_y):
-        """
-            Apply accum by preventing current task data instances from being added to evaluation and candidate set
-                such that evaluation and candidate set are solely from previous task.
-            End Goal of Accum:
-                After soring SV, replace candidate data with smallest SV with current input.
-                This accumulates current task data in buffer
-                    as long as current task data count is smaller than threshold specified by accum_size.
-                This promotes inclusion of new split task samples so class balance in buffer can be achieved later.
-                Args:
-                    cur_y (tensor): current input label tensor.
-                Returns
-                    accum_excl_indices (set): updated indices of buffered instances to be excluded from sampling.
-        """
-        excl_indices = set()
-        if self.aux_smp_type == "accum":
-            # Distinct current input labels
-            cur_label_set = set(cur_y.tolist())
+    # If number of buffered samples from certain class is lower than random threshold,
+    #   that class is minority class
+    cls_proportion = ClassBalancedRandomSampling.class_num_cache.float() / mem_size
+    minority_ind = nonzero_indices(cls_proportion[cur_y] < threshold)
 
-            # If current input is new split task, update current task label set and count
-            self.check_new_split_task(cur_label_set)
-
-            # accum activation condition
-            # Number of current task samples seen so far (i.e., self.count_cur)
-            #   should be less than threshold (i.e., self.accum_size)
-            if self.count_cur <= self.accum_size:
-                # Update count
-                self.count_cur += cur_y.size(0)
-                cls_ind_cache = ClassBalancedRandomSampling.class_index_cache
-
-                for c in cur_label_set:
-                    excl_indices = excl_indices.union(cls_ind_cache[c])
-
-        return excl_indices
-
-    def check_new_split_task(self, cur_label_set):
-        """
-            Check if new split task has started. If so, update current task label set and count.
-                Args:
-                    cur_label_set (set): set of distinct current input labels.
-        """
-        # Check if task has changed
-        # If current input labels are not subset of current task label set
-        # Current task label set should be updated (i.e., it may be no longer 'current' task label set)
-        if not cur_label_set.issubset(self.cur_task_label_set):
-            if len(self.cur_task_label_set) < self.n_labels_per_split_task:
-                # Current task label set is partially updated, so update it further with current input labels
-                self.cur_task_label_set = self.cur_task_label_set.union(cur_label_set)
-            else:
-                # Task has changed. Replace current task label set with current input labels set
-                # Reset current task count
-                self.cur_task_label_set = cur_label_set
-                self.count_cur = 0
-
-    def add_minority_class_input(self, cur_x, cur_y, threshold):
-        """
-            Find input instances from minority classes, and concatenate them to pre-selected data/label tensors.
-                Args:
-                    cur_x (tensor): current input data tensor.
-                    cur_y (tensor): current input label tensor.
-                Returns
-                    minority_batch_x (tensor): subset of current input data from minority class.
-                    minority_batch_y (tensor): subset of current input label from minority class.
-        """
-        # Select input instances from minority classes that will be concatenated to pre-selected data
-        if threshold == 'rand':
-            threshold = torch.tensor(1).float().uniform_(0, self.min_exp_n_per_cls).int()
-        else:
-            threshold = self.min_exp_n_per_cls
-        # If number of buffered samples from certain class is lower than random threshold,
-        #   that class is minority class
-        cls_num_cache = ClassBalancedRandomSampling.class_num_cache
-        minority_class = nonzero_indices(cls_num_cache < threshold)
-        # Get minority class mask
-        minority_class_mask = torch.zeros(self.out_dim, device=self.device).byte()
-        minority_class_mask[minority_class] = 1
-        # Get one-hot-encoding of current input label
-        cur_y_ohe = ohe_label(cur_y, self.out_dim, device=self.device)
-        # Apply minority class mask to one-hot-encoded current input label
-        #   to get indices of current input from minority classes
-        ind_minority_cur_y = nonzero_indices((cur_y_ohe & minority_class_mask).sum(1))
-        minority_batch_x = cur_x[ind_minority_cur_y]
-        minority_batch_y = cur_y[ind_minority_cur_y]
-        return minority_batch_x, minority_batch_y
+    minority_batch_x = cur_x[minority_ind]
+    minority_batch_y = cur_y[minority_ind]
+    return minority_batch_x, minority_batch_y

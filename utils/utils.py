@@ -4,7 +4,6 @@ import torch
 def maybe_cuda(what, use_cuda=True, **kw):
     """
     Moves `what` to CUDA and returns it, if `use_cuda` and it's available.
-
         Args:
             what (object): any object to move to eventually gpu
             use_cuda (bool): if we want to use gpu or cpu.
@@ -53,6 +52,10 @@ def mini_batch_deep_features(model, total_x, num):
             Returns
                 deep_features (tensor): deep feature representation of data tensor.
     """
+    is_train = False
+    if model.training:
+        is_train = True
+        model.eval()
     if hasattr(model, "features"):
         model_has_feature_extractor = True
     else:
@@ -82,6 +85,8 @@ def mini_batch_deep_features(model, total_x, num):
             deep_features_ = deep_features_list[0]
         else:
             deep_features_ = torch.cat(deep_features_list, 0)
+    if is_train:
+        model.train()
     return deep_features_
 
 
@@ -127,4 +132,3 @@ class EarlyStopping():
     def reset(self):
         self.counter = 0
         self.best_score = None
-

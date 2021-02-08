@@ -1,6 +1,6 @@
 import torch
 from utils.buffer.buffer_utils import random_retrieve, ClassBalancedRandomSampling
-from utils.buffer.aser_utils import compute_knn_sv, AuxSamplingManager
+from utils.buffer.aser_utils import compute_knn_sv
 from utils.utils import maybe_cuda
 from utils.setup_elements import n_classes
 
