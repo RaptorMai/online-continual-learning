@@ -1,4 +1,4 @@
 parameters:
   learning_rate: [0.01, 0.1]
-  weight_decay: [0.01]
-  k: [5]
+  k: [3, 5, 7]
+  n_smp_cls: [2.0, 5.0, 7.0]

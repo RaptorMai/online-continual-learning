@@ -1,8 +1,9 @@
 # Online Continual Learning
+![](aaai_aser.jpg)
+
 Official repository of 
 * [Online Continual Learning in Image Classification: An Empirical Survey](https://arxiv.org/pdf/2101.10423.pdf) (Under review)
 * [Online Class-Incremental Continual Learning with Adversarial Shapley Value](https://arxiv.org/abs/2009.00093) (AAAI 2021)
-
 
 ## Requirements
 ![](https://img.shields.io/badge/python-3.7-green.svg)
@@ -27,17 +28,17 @@ pip install -r requirements.txt
 
 ## Datasets 
 
-###Online Class Incremental
+### Online Class Incremental
 - Split CIFAR10
 - Split CIFAR100
 - CORe50-NC
 - Split Mini-ImageNet
 
-###Online Domain Incremental
+### Online Domain Incremental
 - NonStationary-MiniImageNet (Noise, Occlusion, Blur)
 - CORe50-NI
   
-###Data preparation
+### Data preparation
 - CIFAR10 & CIFAR100 will be downloaded during the first run
 - CORE50 download: `source fetch_data_setup.sh`
 - Mini-ImageNet: Download from https://www.kaggle.com/whitemoon/miniimagenet/download , and place it in datasets/mini_imagenet/
@@ -58,15 +59,17 @@ pip install -r requirements.txt
 * CN-DPM: Continual Neural Dirichlet Process Mixture (**ICLR, 2020**) [[Paper]](https://openreview.net/forum?id=SJxSOJStPr)
 
 ## Tricks
-- Label trick, [Paper](https://arxiv.org/pdf/1803.10123.pdf)
-- Cross entropy with knowledge distillation, [Paper](https://arxiv.org/abs/1807.09536)
-- Multiple iterations, [Paper](https://proceedings.neurips.cc/paper/2019/hash/15825aee15eb335cc13f9b559f166ee8-Abstract.html)
-- Nearest Class Mean classifier, [Paper](https://arxiv.org/abs/2004.00440)
-- Separated Softmax, [Paper](https://arxiv.org/abs/2003.13947)
-- Review Trick, [Paper](https://arxiv.org/abs/2007.05683)
+- Label trick [[Paper]](https://arxiv.org/pdf/1803.10123.pdf)
+- Cross entropy with knowledge distillation [[Paper]](https://arxiv.org/abs/1807.09536)
+- Multiple iterations [[Paper]](https://proceedings.neurips.cc/paper/2019/hash/15825aee15eb335cc13f9b559f166ee8-Abstract.html)
+- Nearest Class Mean classifier [[Paper]](https://arxiv.org/abs/2004.00440)
+- Separated Softmax [[Paper]](https://arxiv.org/abs/2003.13947)
+- Review Trick [[Paper]](https://arxiv.org/abs/2007.05683)
 
 ## Run commands
-### Sample commands to run algorithms
+Detailed descriptions of options can be found in [general_main.py](general_main.py)
+
+### Sample commands to run algorithms on Split-CIFAR100
 ```shell
 #ER
 python general_main.py --data cifar100 --cl_type nc --agent ER --retrieve random --update random --mem_size 5000
@@ -99,9 +102,14 @@ python general_main.py --data cifar100 --cl_type nc --agent CNDPM --stm_capacity
 python general_main.py --data cifar100 --cl_type nc --agent ER --update ASER --retrieve ASER --mem_size 5000 --aser_type asvm --n_smp_cls 1.5 --k 3 
 ```
 
-### Sample commands to run tricks for memory-based methods
+### Sample command to add a trick to memory-based methods
 ```shell
 python general_main.py --review_trick True --data cifar100 --cl_type nc --agent ER --retrieve MIR --update random --mem_size 5000 
+```
+
+### Sample commands to run hyper-parameters tuning 
+```shell
+python main_tune.py --general config/general_1.yml --data config/data/cifar100/cifar100_nc.yml --default config/agent/mir/mir_1k.yml --tune config/agent/mir/mir_tune.yml
 ```
 
 
@@ -134,51 +142,32 @@ python general_main.py --review_trick True --data cifar100 --cl_type nc --agent 
         ├──pretrained.py                #Files for pre-trained models
         ├──resnet.py                    #Files for ResNet
 
-    ├──utils                        # Files for utilities
+    ├──utils                        #Files for utilities
         ├──buffer                       #Files related to buffer
-            ├──aser_retrieve.py
-            ├──aser_update.py
-            ├──aser_utils.py
-            ├──buffer.py
-            ├──buffer_utils.py
-            ├──gss_greedy_update.py
-            ├──mir_retrieve.py
-            ├──random_retrieve.py
-            ├──reservoir_update.py
+            ├──aser_retrieve.py             #File for ASER retrieval
+            ├──aser_update.py               #File for ASER update
+            ├──aser_utils.py                #File for utilities for ASER
+            ├──buffer.py                    #Abstract class for buffer
+            ├──buffer_utils.py              #General utilities for all the buffer files
+            ├──gss_greedy_update.py         #File for GSS update
+            ├──mir_retrieve.py              #File for MIR retrieval
+            ├──random_retrieve.py           #File for random retrieval
+            ├──reservoir_update.py          #File for random update
+
         ├──global_vars.py               #Global variables for CN-DPM
         ├──io.py                        #Code related to load and store csv or yarml
         ├──kd_manager.py                #File for knowledge distillation
-        ├──name_match.py                # 
-        ├──setup_elements.py
-        ├──utils.py
+        ├──name_match.py                #Match name strings to objects 
+        ├──setup_elements.py            #Set up and initialize basic elements
+        ├──utils.py                     #File for general utilities
 
-    ├──
-        ├──
-        ├──
-        ├──
+    ├──config                       #Config files for hyper-parameters tuning
+        ├──agent                        #Config files related to agents
+        ├──data                         #Config files related to dataset
 
+        ├──general_*.yml                #General yml (fixed variables, not tuned)
+        ├──global.yml                   #paths to store results 
 
-
-
-    ├──
-    ├──
-    ├──
-    ├──
-    ├──
-    ├──
-    ├──
-    ├──
-
-
-
-
-
-
-
-
-
-
-        
 
 ## Citation 
 If you use this paper/code in your research, please consider citing us:
@@ -206,3 +195,11 @@ Under review, preprint on arXiv [here](https://arxiv.org/pdf/2101.10423.pdf).
   year={2020}
 }
 ```
+
+## Contact & Contribution
+- [Zheda Mai](https://zheda-mai.github.io/) (Corresponding author)  
+zheda.mai@mail.utoronto.ca
+- [Ruiwen Li](https://www.linkedin.com/in/ruiwen-li-4a272b55/)
+- [Dongsub Shim](https://github.com/DongsubShim)
+
+
