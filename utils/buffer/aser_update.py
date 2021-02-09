@@ -69,7 +69,8 @@ class ASER_update(object):
         eval_y = torch.cat((eval_y, minority_batch_y))
 
         # Candidate set
-        cand_x, cand_y, cand_ind = random_retrieve(buffer, self.n_total_smp, eval_indices, return_indices=True)
+        cand_excl_indices = set(eval_indices.tolist())
+        cand_x, cand_y, cand_ind = random_retrieve(buffer, self.n_total_smp, cand_excl_indices, return_indices=True)
 
         # Concatenate current input batch to candidate set
         cand_x = torch.cat((cand_x, cur_x))
