@@ -203,3 +203,9 @@ zheda.mai@mail.utoronto.ca
 - [Dongsub Shim](https://github.com/DongsubShim)
 
 
+## Acknowledgments
+- [MIR](https://github.com/optimass/Maximally_Interfered_Retrieval)
+- [GSS](https://github.com/rahafaljundi/Gradient-based-Sample-Selection)
+- [CN-DPM](https://github.com/soochan-lee/CN-DPM)
+- [GDumb](https://github.com/drimpossible/GDumb)
+- [AGEM](https://github.com/facebookresearch/agem)
