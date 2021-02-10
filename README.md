@@ -209,3 +209,7 @@ zheda.mai@mail.utoronto.ca
 - [CN-DPM](https://github.com/soochan-lee/CN-DPM)
 - [GDumb](https://github.com/drimpossible/GDumb)
 - [AGEM](https://github.com/facebookresearch/agem)
+
+## Note
+The PyTorch implementation of ASER in this repository is more efficient than the original TensorFlow implementation and has better performance.
+The results of the ASER paper can be reproduced in the [original TensorFlow implementation repository](https://github.com/RaptorMai/ASER). 
