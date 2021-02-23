@@ -85,6 +85,8 @@ class ExperienceReplay(ContinualLearner):
                         loss_combined = self.criterion(combined_logits, combined_labels)
                         loss_combined.backward()
                         self.opt.step()
+                    else:
+                        self.opt.step()
 
                 # update mem
                 self.buffer.update(batch_x, batch_y)
