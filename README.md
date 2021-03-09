@@ -78,7 +78,7 @@ python general_main.py --data cifar100 --cl_type nc --agent ER --retrieve random
 python general_main.py --data cifar100 --cl_type nc --agent ER --retrieve MIR --update random --mem_size 5000
 
 #GSS
-python general_main.py --data cifar100 --cl_type nc --agent ER --retrieve GSS --update random --eps_mem_batch 10 --gss_mem_strength 20 --mem_size 5000
+python general_main.py --data cifar100 --cl_type nc --agent ER --retrieve random --update GSS --eps_mem_batch 10 --gss_mem_strength 20 --mem_size 5000
 
 #LwF
 python general_main.py --data cifar100 --cl_type nc --agent LWF 
