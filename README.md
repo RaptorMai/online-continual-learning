@@ -173,6 +173,18 @@ python main_tune.py --general config/general_1.yml --data config/data/cifar100/c
 ## Citation 
 If you use this paper/code in your research, please consider citing us:
 
+**Supervised Contrastive Replay: Revisiting the Nearest Class Mean Classifier in Online Class-Incremental Continual Learning**
+
+Under review, preprint on arXiv [here](https://arxiv.org/abs/2103.13885).
+```
+@article{mai2021supervised,
+  title={Supervised Contrastive Replay: Revisiting the Nearest Class Mean Classifier in Online Class-Incremental Continual Learning},
+  author={Mai, Zheda and Li, Ruiwen and Kim, Hyunwoo and Sanner, Scott},
+  journal={arXiv preprint arXiv:2103.13885},
+  year={2021}
+}
+```
+
 **Online Continual Learning in Image Classification: An Empirical Survey**
 
 Under review, preprint on arXiv [here](https://arxiv.org/pdf/2101.10423.pdf).
