@@ -2,8 +2,9 @@
 ![](aaai_aser.jpg)
 
 Official repository of 
-* [Online Continual Learning in Image Classification: An Empirical Survey](https://arxiv.org/pdf/2101.10423.pdf) (Under review)
 * [Online Class-Incremental Continual Learning with Adversarial Shapley Value](https://arxiv.org/abs/2009.00093) (AAAI 2021)
+* [Online Continual Learning in Image Classification: An Empirical Survey](https://arxiv.org/pdf/2101.10423.pdf) (Under review)
+* [Supervised Contrastive Replay: Revisiting the Nearest Class Mean Classifier in Online Class-Incremental Continual Learning](https://arxiv.org/abs/2103.13885) (Under review)
 
 ## Requirements
 ![](https://img.shields.io/badge/python-3.7-green.svg)
@@ -78,7 +79,7 @@ python general_main.py --data cifar100 --cl_type nc --agent ER --retrieve random
 python general_main.py --data cifar100 --cl_type nc --agent ER --retrieve MIR --update random --mem_size 5000
 
 #GSS
-python general_main.py --data cifar100 --cl_type nc --agent ER --retrieve GSS --update random --eps_mem_batch 10 --gss_mem_strength 20 --mem_size 5000
+python general_main.py --data cifar100 --cl_type nc --agent ER --retrieve random --update GSS --eps_mem_batch 10 --gss_mem_strength 20 --mem_size 5000
 
 #LwF
 python general_main.py --data cifar100 --cl_type nc --agent LWF 
@@ -171,6 +172,18 @@ python main_tune.py --general config/general_1.yml --data config/data/cifar100/c
 
 ## Citation 
 If you use this paper/code in your research, please consider citing us:
+
+**Supervised Contrastive Replay: Revisiting the Nearest Class Mean Classifier in Online Class-Incremental Continual Learning**
+
+Under review, preprint on arXiv [here](https://arxiv.org/abs/2103.13885).
+```
+@article{mai2021supervised,
+  title={Supervised Contrastive Replay: Revisiting the Nearest Class Mean Classifier in Online Class-Incremental Continual Learning},
+  author={Mai, Zheda and Li, Ruiwen and Kim, Hyunwoo and Sanner, Scott},
+  journal={arXiv preprint arXiv:2103.13885},
+  year={2021}
+}
+```
 
 **Online Continual Learning in Image Classification: An Empirical Survey**
 
