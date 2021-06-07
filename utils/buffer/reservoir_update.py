@@ -21,7 +21,13 @@ class Reservoir_update(object):
 
             # everything was added
             if offset == x.size(0):
-                return list(range(buffer.current_index, buffer.current_index + offset))
+                filled_idx = list(range(buffer.current_index - offset, buffer.current_index, ))
+                if buffer.params.buffer_tracker:
+                    buffer.buffer_tracker.update_cache(buffer.buffer_label, y[:offset], filled_idx)
+                return filled_idx
+
+
+        #TODO: the buffer tracker will have bug when the mem size can't be divided by batch size
 
         # remove what is already in the buffer
         x, y = x[place_left:], y[place_left:]
@@ -45,7 +51,11 @@ class Reservoir_update(object):
         assert idx_new_data.max() < y.size(0)
 
         idx_map = {idx_buffer[i].item(): idx_new_data[i].item() for i in range(idx_buffer.size(0))}
+
+        replace_y = y[list(idx_map.values())]
+        if buffer.params.buffer_tracker:
+            buffer.buffer_tracker.update_cache(buffer.buffer_label, replace_y, list(idx_map.keys()))
         # perform overwrite op
         buffer.buffer_img[list(idx_map.keys())] = x[list(idx_map.values())]
-        buffer.buffer_label[list(idx_map.keys())] = y[list(idx_map.values())]
+        buffer.buffer_label[list(idx_map.keys())] = replace_y
         return list(idx_map.keys())

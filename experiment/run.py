@@ -14,13 +14,22 @@ import os
 import pickle
 
 
-def multiple_run(params):
+def multiple_run(params, store=False, save_path=None):
     # Set up data stream
     start = time.time()
     print('Setting up data stream')
     data_continuum = continuum(params.data, params.cl_type, params)
     data_end = time.time()
     print('data setup time: {}'.format(data_end - start))
+
+    if store:
+        result_path = load_yaml('config/global.yml', key='path')['result']
+        table_path = result_path + params.data
+        print(table_path)
+        os.makedirs(table_path, exist_ok=True)
+        if not save_path:
+            save_path = params.model_name + '_' + params.data_name + '.pkl'
+
     accuracy_list = []
     for run in range(params.num_runs):
         tmp_acc = []
@@ -33,23 +42,49 @@ def multiple_run(params):
 
         # prepare val data loader
         test_loaders = setup_test_loader(data_continuum.test_data(), params)
-        for i, (x_train, y_train, labels) in enumerate(data_continuum):
-            print("-----------run {} training batch {}-------------".format(run, i))
-            print('size: {}, {}'.format(x_train.shape, y_train.shape))
-            agent.train_learner(x_train, y_train)
+        if params.online:
+            for i, (x_train, y_train, labels) in enumerate(data_continuum):
+                print("-----------run {} training batch {}-------------".format(run, i))
+                print('size: {}, {}'.format(x_train.shape, y_train.shape))
+                agent.train_learner(x_train, y_train)
+                acc_array = agent.evaluate(test_loaders)
+                tmp_acc.append(acc_array)
+            run_end = time.time()
+            print(
+                "-----------run {}-----------avg_end_acc {}-----------train time {}".format(run, np.mean(tmp_acc[-1]),
+                                                                               run_end - run_start))
+            accuracy_list.append(np.array(tmp_acc))
+        else:
+            x_train_offline = []
+            y_train_offline = []
+            for i, (x_train, y_train, labels) in enumerate(data_continuum):
+                x_train_offline.append(x_train)
+                y_train_offline.append(y_train)
+            print('Training Start')
+            x_train_offline = np.concatenate(x_train_offline, axis=0)
+            y_train_offline = np.concatenate(y_train_offline, axis=0)
+            print("----------run {} training-------------".format(run))
+            print('size: {}, {}'.format(x_train_offline.shape, y_train_offline.shape))
+            agent.train_learner(x_train_offline, y_train_offline)
             acc_array = agent.evaluate(test_loaders)
-            tmp_acc.append(acc_array)
-        run_end = time.time()
-        print(
-            "-----------run {}-----------avg_end_acc {}-----------train time {}".format(run, np.mean(tmp_acc[-1]),
-                                                                           run_end - run_start))
-        accuracy_list.append(np.array(tmp_acc))
-    accuracy_list = np.array(accuracy_list)
-    avg_end_acc, avg_end_fgt, avg_acc, avg_bwtp, avg_fwt = compute_performance(accuracy_list)
+            accuracy_list.append(acc_array)
+
+    accuracy_array = np.array(accuracy_list)
     end = time.time()
-    print('----------- Total {} run: {}s -----------'.format(params.num_runs, end - start))
-    print('----------- Avg_End_Acc {} Avg_End_Fgt {} Avg_Acc {} Avg_Bwtp {} Avg_Fwt {}-----------'
-          .format(avg_end_acc, avg_end_fgt, avg_acc, avg_bwtp, avg_fwt))
+    if store:
+        result = {'time': end - start}
+        result['acc_array'] = accuracy_array
+        save_file = open(table_path + '/' + save_path, "wb")
+        pickle.dump(result, save_file)
+        save_file.close()
+    if params.online:
+        avg_end_acc, avg_end_fgt, avg_acc, avg_bwtp, avg_fwt = compute_performance(accuracy_array)
+        print('----------- Total {} run: {}s -----------'.format(params.num_runs, end - start))
+        print('----------- Avg_End_Acc {} Avg_End_Fgt {} Avg_Acc {} Avg_Bwtp {} Avg_Fwt {}-----------'
+              .format(avg_end_acc, avg_end_fgt, avg_acc, avg_bwtp, avg_fwt))
+    else:
+        print('----------- Total {} run: {}s -----------'.format(params.num_runs, end - start))
+        print("avg_end_acc {}".format(np.mean(accuracy_list)))
 
 
 

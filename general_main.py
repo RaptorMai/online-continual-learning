@@ -18,8 +18,8 @@ def main(args):
         torch.backends.cudnn.benchmark = False
     args.trick = {'labels_trick': args.labels_trick, 'separated_softmax': args.separated_softmax,
                   'kd_trick': args.kd_trick, 'kd_trick_star': args.kd_trick_star, 'review_trick': args.review_trick,
-                  'nmc_trick': args.nmc_trick}
-    multiple_run(args)
+                  'ncm_trick': args.ncm_trick}
+    multiple_run(args, store=args.store, save_path=args.save_path)
 
 
 if __name__ == "__main__":
@@ -42,14 +42,17 @@ if __name__ == "__main__":
                         help='Perform error analysis (default: %(default)s)')
     parser.add_argument('--verbose', type=boolean_string, default=True,
                         help='print information or not (default: %(default)s)')
+    parser.add_argument('--store', type=boolean_string, default=False,
+                        help='Store result or not (default: %(default)s)')
+    parser.add_argument('--save-path', dest='save_path', default=None)
 
     ########################Agent#########################
     parser.add_argument('--agent', dest='agent', default='ER',
-                        choices=['ER', 'EWC', 'AGEM', 'CNDPM', 'LWF', 'ICARL', 'GDUMB', 'ASER'],
+                        choices=['ER', 'EWC', 'AGEM', 'CNDPM', 'LWF', 'ICARL', 'GDUMB', 'ASER', 'SCR'],
                         help='Agent selection  (default: %(default)s)')
     parser.add_argument('--update', dest='update', default='random', choices=['random', 'GSS', 'ASER'],
                         help='Update method  (default: %(default)s)')
-    parser.add_argument('--retrieve', dest='retrieve', default='random', choices=['MIR', 'random', 'ASER'],
+    parser.add_argument('--retrieve', dest='retrieve', default='random', choices=['MIR', 'random', 'ASER', 'match', 'mem_match'],
                         help='Retrieve method  (default: %(default)s)')
 
     ########################Optimizer#########################
@@ -91,6 +94,9 @@ if __name__ == "__main__":
                         help='Type of non-stationary (default: %(default)s)')
     parser.add_argument('--ns_task', dest='ns_task', nargs='+', default=(1, 1, 2, 2, 2, 2), type=int,
                         help='NI Non Stationary task composition (default: %(default)s)')
+    parser.add_argument('--online', dest='online', default=True,
+                        type=boolean_string,
+                        help='If False, offline training will be performed (default: %(default)s)')
 
     ########################ER#########################
     parser.add_argument('--mem_size', dest='mem_size', default=10000,
@@ -157,8 +163,8 @@ if __name__ == "__main__":
                         help='Improved knowledge distillation trick')
     parser.add_argument('--review_trick', dest='review_trick', default=False, type=boolean_string,
                         help='Review trick')
-    parser.add_argument('--nmc_trick', dest='nmc_trick', default=False, type=boolean_string,
-                        help='Use nearest mean classifier')
+    parser.add_argument('--ncm_trick', dest='ncm_trick', default=False, type=boolean_string,
+                        help='Use nearest class mean classifier')
     parser.add_argument('--mem_iters', dest='mem_iters', default=1, type=int,
                         help='mem_iters')
 
@@ -171,6 +177,15 @@ if __name__ == "__main__":
                         help='If True, `min_delta` defines an increase since the last `patience` reset, '
                              'otherwise, it defines an increase after the last event.')
 
+    ####################SupContrast######################
+    parser.add_argument('--temp', type=float, default=0.07,
+                        help='temperature for loss function')
+    parser.add_argument('--buffer_tracker', type=boolean_string, default=False,
+                        help='Keep track of buffer with a dictionary')
+    parser.add_argument('--warmup', type=int, default=4,
+                        help='warmup of buffer before retrieve')
+    parser.add_argument('--head', type=str, default='mlp',
+                        help='projection head')
     args = parser.parse_args()
     args.cuda = torch.cuda.is_available()
     main(args)

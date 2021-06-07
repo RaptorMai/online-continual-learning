@@ -2,6 +2,8 @@ import torch
 import numpy as np
 from utils.utils import maybe_cuda
 from collections import defaultdict
+from collections import Counter
+import random
 
 
 def random_retrieve(buffer, num_retrieve, excl_indices=None, return_indices=False):
@@ -23,6 +25,27 @@ def random_retrieve(buffer, num_retrieve, excl_indices=None, return_indices=Fals
     else:
         return x, y
 
+
+def match_retrieve(buffer, cur_y, exclud_idx=None):
+    counter = Counter(cur_y.tolist())
+    idx_dict = defaultdict(list)
+    for idx, val in enumerate(cur_y.tolist()):
+        idx_dict[val].append(idx)
+    select = [None] * len(cur_y)
+    for y in counter:
+        idx = buffer.buffer_tracker.class_index_cache[y]
+        if exclud_idx is not None:
+            idx = idx - set(exclud_idx.tolist())
+        if not idx or len(idx) < counter[y]:
+            print('match retrieve attempt fail')
+            return torch.tensor([]), torch.tensor([])
+        retrieved = random.sample(list(idx), counter[y])
+        for idx, val in zip(idx_dict[y], retrieved):
+            select[idx] = val
+    indices = torch.tensor(select)
+    x = buffer.buffer_img[indices]
+    y = buffer.buffer_label[indices]
+    return x, y
 
 def cosine_similarity(x1, x2=None, eps=1e-8):
     x2 = x1 if x2 is None else x2
@@ -135,3 +158,47 @@ class ClassBalancedRandomSampling:
             for i, c in enumerate(buffer_y):
                 cls_ind_cache[c.item()].add(i)
             cls.class_index_cache = cls_ind_cache
+
+
+class BufferClassTracker(object):
+    # For faster label-based sampling (e.g., class balanced sampling), cache class-index via auxiliary dictionary
+    # Store {class, set of memory sample indices from class} key-value pairs to speed up label-based sampling
+    # e.g., {<cls_A>: {<ind_1>, <ind_2>}, <cls_B>: {}, <cls_C>: {<ind_3>}, ...}
+
+    def __init__(self, num_class, device="cpu"):
+        super().__init__()
+        # Initialize caches
+        self.class_index_cache = defaultdict(set)
+        self.class_num_cache = np.zeros(num_class)
+
+
+    def update_cache(self, buffer_y, new_y=None, ind=None, ):
+        """
+            Collect indices of buffered data from each class in set.
+            Update class_index_cache with list of such sets.
+                Args:
+                    buffer_y (tensor): label buffer.
+                    num_class (int): total number of unique class labels.
+                    new_y (tensor): label tensor for replacing memory samples at ind in buffer.
+                    ind (tensor): indices of memory samples to be updated.
+                    device (str): device for tensor allocation.
+        """
+
+        # Get labels of memory samples to be replaced
+        orig_y = buffer_y[ind]
+        # Update caches
+        for i, ny, oy in zip(ind, new_y, orig_y):
+            oy_int = oy.item()
+            ny_int = ny.item()
+            # Update dictionary according to new class label of index i
+            if oy_int in self.class_index_cache and i in self.class_index_cache[oy_int]:
+                self.class_index_cache[oy_int].remove(i)
+                self.class_num_cache[oy_int] -= 1
+
+            self.class_index_cache[ny_int].add(i)
+            self.class_num_cache[ny_int] += 1
+
+
+    def check_tracker(self):
+        print(self.class_num_cache.sum())
+        print(len([k for i in self.class_index_cache.values() for k in i]))

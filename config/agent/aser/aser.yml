@@ -5,4 +5,4 @@ parameters:
   mem_size: 5000
   eps_mem_batch: 10
   aser_type: asv
-  name: ER_ASER
+  name: ER_ASER_5k

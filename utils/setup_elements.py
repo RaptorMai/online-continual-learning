@@ -1,12 +1,11 @@
 import torch
-from models.resnet import Reduced_ResNet18
-from models.pretrained import ResNet18_pretrained
+from models.resnet import Reduced_ResNet18, SupConResNet
 from torchvision import transforms
 import torch.nn as nn
 
 
 default_trick = {'labels_trick': False, 'kd_trick': False, 'separated_softmax': False,
-                 'review_trick': False, 'nmc_trick': False}
+                 'review_trick': False, 'ncm_trick': False, 'kd_trick_star': False}
 
 
 input_size_match = {
@@ -46,6 +45,10 @@ transforms_match = {
 
 def setup_architecture(params):
     nclass = n_classes[params.data]
+    if params.agent in ['SCR', 'SCP']:
+        if params.data == 'mini_imagenet':
+            return SupConResNet(640, head=params.head)
+        return SupConResNet(head=params.head)
     if params.agent == 'CNDPM':
         from models.ndpm.ndpm import Ndpm
         return Ndpm(params)

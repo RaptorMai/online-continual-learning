@@ -2,6 +2,7 @@ import yaml
 import pandas as pd
 import os
 import psutil
+import torch
 
 def load_yaml(path, key='parameters'):
     with open(path, 'r') as stream:
@@ -31,3 +32,14 @@ def check_ram_usage():
     mem = process.memory_info().rss / (1024 * 1024)
 
     return mem
+
+def save_model(model, optimizer, opt, epoch, save_file):
+    print('==> Saving...')
+    state = {
+        'opt': opt,
+        'model': model.state_dict(),
+        'optimizer': optimizer.state_dict(),
+        'epoch': epoch,
+    }
+    torch.save(state, save_file)
+    del state
