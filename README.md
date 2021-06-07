@@ -59,6 +59,7 @@ pip install -r requirements.txt
 * GSS: Gradient-Based Sample Selection (**NeurIPS, 2019**) [[Paper]](https://arxiv.org/pdf/1903.08671.pdf)
 * GDumb: Greedy Sampler and Dumb Learner (**ECCV, 2020**) [[Paper]](https://www.robots.ox.ac.uk/~tvg/publications/2020/gdumb.pdf)
 * CN-DPM: Continual Neural Dirichlet Process Mixture (**ICLR, 2020**) [[Paper]](https://openreview.net/forum?id=SJxSOJStPr)
+* SCR: Supervised Contrastive Replay (**CVPR Workshop, 2021**) [[Paper]](https://arxiv.org/abs/2103.13885) 
 
 ## Tricks
 - Label trick [[Paper]](https://arxiv.org/pdf/1803.10123.pdf)
@@ -102,6 +103,9 @@ python general_main.py --data cifar100 --cl_type nc --agent CNDPM --stm_capacity
 
 #ASER
 python general_main.py --data cifar100 --cl_type nc --agent ER --update ASER --retrieve ASER --mem_size 5000 --aser_type asvm --n_smp_cls 1.5 --k 3 
+
+#SCR
+python general_main.py --data cifar100 --cl_type nc --agent SCR --retrieve random --update random --mem_size 5000 --head mlp --temp 0.07
 ```
 
 ### Sample command to add a trick to memory-based methods
@@ -125,6 +129,7 @@ python main_tune.py --general config/general_1.yml --data config/data/cifar100/c
         ├──gdumb.py                     #File for GDumb
         ├──iCaRL.py                     #File for iCaRL
         ├──lwf.py                       #File for LwF
+        ├──scr.py                       #File for SCR
 
     ├──continuum                    #Files for create the data stream objects
         ├──dataset_scripts              #Files for processing each specific dataset
