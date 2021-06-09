@@ -105,7 +105,7 @@ python general_main.py --data cifar100 --cl_type nc --agent CNDPM --stm_capacity
 python general_main.py --data cifar100 --cl_type nc --agent ER --update ASER --retrieve ASER --mem_size 5000 --aser_type asvm --n_smp_cls 1.5 --k 3 
 
 #SCR
-python general_main.py --data cifar100 --cl_type nc --agent SCR --retrieve random --update random --mem_size 5000 --head mlp --temp 0.07
+python general_main.py --data cifar100 --cl_type nc --agent SCR --retrieve random --update random --mem_size 5000 --head mlp --temp 0.07 --eps_mem_batch 100
 ```
 
 ### Sample command to add a trick to memory-based methods
