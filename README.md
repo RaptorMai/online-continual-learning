@@ -3,7 +3,7 @@
 
 Official repository of 
 * [Online Class-Incremental Continual Learning with Adversarial Shapley Value](https://arxiv.org/abs/2009.00093) (AAAI 2021)
-* [Supervised Contrastive Replay: Revisiting the Nearest Class Mean Classifier in Online Class-Incremental Continual Learning](https://arxiv.org/abs/2103.13885) (CVPR2021 Workshop)
+* [Supervised Contrastive Replay: Revisiting the Nearest Class Mean Classifier in Online Class-Incremental Continual Learning](https://openaccess.thecvf.com/content/CVPR2021W/CLVision/html/Mai_Supervised_Contrastive_Replay_Revisiting_the_Nearest_Class_Mean_Classifier_in_CVPRW_2021_paper.html) (CVPR2021 Workshop)
 * [Online Continual Learning in Image Classification: An Empirical Survey](https://arxiv.org/pdf/2101.10423.pdf) (Under review)
 
 
@@ -183,10 +183,11 @@ If you use this paper/code in your research, please consider citing us:
 
 [Accepted at CVPR2021 Workshop](https://arxiv.org/abs/2103.13885).
 ```
-@article{mai2021supervised,
+@inproceedings{mai2021supervised,
   title={Supervised Contrastive Replay: Revisiting the Nearest Class Mean Classifier in Online Class-Incremental Continual Learning},
   author={Mai, Zheda and Li, Ruiwen and Kim, Hyunwoo and Sanner, Scott},
-  journal={arXiv preprint arXiv:2103.13885},
+  booktitle={Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition},
+  pages={3589--3599},
   year={2021}
 }
 ```
