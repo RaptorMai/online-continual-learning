@@ -208,11 +208,14 @@ Under review, preprint on arXiv [here](https://arxiv.org/pdf/2101.10423.pdf).
 
 [Accepted at AAAI2021](https://arxiv.org/abs/2009.00093)
 ```
-@article{shim2020online,
+@inproceedings{shim2021online,
   title={Online Class-Incremental Continual Learning with Adversarial Shapley Value},
   author={Shim, Dongsub and Mai, Zheda and Jeong, Jihwan and Sanner, Scott and Kim, Hyunwoo and Jang, Jongseong},
-  journal={arXiv preprint arXiv:2009.00093},
-  year={2020}
+  booktitle={Proceedings of the AAAI Conference on Artificial Intelligence},
+  volume={35},
+  number={11},
+  pages={9630--9638},
+  year={2021}
 }
 ```
 
