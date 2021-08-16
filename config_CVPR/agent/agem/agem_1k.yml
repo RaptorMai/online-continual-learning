@@ -1,0 +1,9 @@
+parameters:
+  agent: AGEM
+  update: random
+  retrieve: random
+  mem_size: 1000
+  eps_mem_batch: 10
+  model_name: AGEM_1k
+  learning_rate: 0.1
+  weight_decay: 0

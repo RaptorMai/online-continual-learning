@@ -1,0 +1,13 @@
+parameters:
+  agent: ER
+  update: ASER
+  retrieve: ASER
+  mem_size: 2000
+  eps_mem_batch: 10
+  aser_type: asvm
+  learning_rate: 0.1
+  weight_decay: 0
+  k: 3
+  n_smp_cls: 2.0
+  ncm_trick: True
+  model_name: ASER_2k_ncm

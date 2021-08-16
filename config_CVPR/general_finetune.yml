@@ -1,0 +1,16 @@
+parameters:
+  #experiment
+  num_runs: 10
+  seed: 0
+  # optimizer
+  optimizer: SGD
+  epoch: 1
+  batch: 10
+  test_batch: 128
+  fix_order: True
+  plot_sample: False
+  online: True
+  buffer_tracker: False
+  mem_iters: 1
+  error_analysis: False
+  model_name: finetune

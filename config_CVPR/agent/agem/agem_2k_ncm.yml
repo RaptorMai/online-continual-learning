@@ -1,0 +1,10 @@
+parameters:
+  agent: AGEM
+  update: random
+  retrieve: random
+  mem_size: 2000
+  eps_mem_batch: 10
+  model_name: AGEM_2k_ncm
+  learning_rate: 0.1
+  weight_decay: 0
+  ncm_trick: True

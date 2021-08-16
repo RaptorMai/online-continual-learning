@@ -1,0 +1,7 @@
+parameters:
+  agent: LWF
+  temperature: 2
+  learning_rate: 0.1
+  weight_decay: 0
+  ncm_trick: True
+  model_name: LWF_ncm

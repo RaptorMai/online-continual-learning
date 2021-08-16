@@ -1,0 +1,5 @@
+parameters:
+  data: mini_imagenet
+  num_tasks: 10
+  cl_type: nc
+  data_name: mini_imagenet_nc

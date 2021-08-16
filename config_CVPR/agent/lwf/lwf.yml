@@ -1,0 +1,6 @@
+parameters:
+  agent: LWF
+  temperature: 2
+  learning_rate: 0.1
+  weight_decay: 0
+  model_name: LWF

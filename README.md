@@ -130,7 +130,7 @@ python main_tune.py --general config/general_1.yml --data config/data/cifar100/c
         ├──iCaRL.py                     #File for iCaRL
         ├──lwf.py                       #File for LwF
         ├──scr.py                       #File for SCR
-
+    
     ├──continuum                    #Files for create the data stream objects
         ├──dataset_scripts              #Files for processing each specific dataset
             ├──dataset_base.py              #Abstract class for dataset
@@ -148,7 +148,7 @@ python main_tune.py --general config/general_1.yml --data config/data/cifar100/c
             ├──...
         ├──pretrained.py                #Files for pre-trained models
         ├──resnet.py                    #Files for ResNet
-
+    
     ├──utils                        #Files for utilities
         ├──buffer                       #Files related to buffer
             ├──aser_retrieve.py             #File for ASER retrieval
@@ -160,23 +160,27 @@ python main_tune.py --general config/general_1.yml --data config/data/cifar100/c
             ├──mir_retrieve.py              #File for MIR retrieval
             ├──random_retrieve.py           #File for random retrieval
             ├──reservoir_update.py          #File for random update
-
+    
         ├──global_vars.py               #Global variables for CN-DPM
         ├──io.py                        #Code related to load and store csv or yarml
         ├──kd_manager.py                #File for knowledge distillation
         ├──name_match.py                #Match name strings to objects 
         ├──setup_elements.py            #Set up and initialize basic elements
         ├──utils.py                     #File for general utilities
-
+    
     ├──config                       #Config files for hyper-parameters tuning
         ├──agent                        #Config files related to agents
         ├──data                         #Config files related to dataset
-
+    
         ├──general_*.yml                #General yml (fixed variables, not tuned)
         ├──global.yml                   #paths to store results 
 
+## Duplicate results
+
+The hyperparameters used in the ASER and SCR papers can be found in the folder `config_CVPR` to duplicate the papers' results. 
 
 ## Citation 
+
 If you use this paper/code in your research, please consider citing us:
 
 **Supervised Contrastive Replay: Revisiting the Nearest Class Mean Classifier in Online Class-Incremental Continual Learning**

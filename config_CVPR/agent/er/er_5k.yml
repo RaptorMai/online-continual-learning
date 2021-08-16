@@ -1,0 +1,9 @@
+parameters:
+  agent: ER
+  update: random
+  retrieve: random
+  mem_size: 5000
+  eps_mem_batch: 10
+  learning_rate: 0.1
+  weight_decay: 0
+  model_name: Naive_ER_5k

@@ -1,0 +1,11 @@
+parameters:
+  agent: SCR
+  update: random
+  retrieve: random
+  mem_size: 200
+  eps_mem_batch: 100
+  learning_rate: 0.1
+  weight_decay: 0
+  temp: 0.1
+  review_trick: True
+  model_name: SCR_02k

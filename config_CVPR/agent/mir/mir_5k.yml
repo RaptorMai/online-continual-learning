@@ -1,0 +1,10 @@
+parameters:
+  agent: ER
+  update: random
+  retrieve: MIR
+  mem_size: 5000
+  eps_mem_batch: 10
+  learning_rate: 0.1
+  weight_decay: 0
+  subsample: 50
+  model_name: MIR_5k

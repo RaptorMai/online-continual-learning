@@ -1,0 +1,11 @@
+parameters:
+  agent: ER
+  update: GSS
+  retrieve: random
+  mem_size: 1000
+  learning_rate: 0.1
+  weight_decay: 0
+  eps_mem_batch: 10
+  gss_batch_size: 10
+  gss_mem_strength: 10
+  model_name: GSS_1k
