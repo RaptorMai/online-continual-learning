@@ -117,6 +117,12 @@ python general_main.py --review_trick True --data cifar100 --cl_type nc --agent 
 ```shell
 python main_tune.py --general config/general_1.yml --data config/data/cifar100/cifar100_nc.yml --default config/agent/mir/mir_1k.yml --tune config/agent/mir/mir_tune.yml
 ```
+There are four config files controling the experiment.
+
+- general config controls variables that are not changed during the experiment
+- data config controls variables related to the dataset
+- default method config controls variables for a specific method that are not changed during the experiment
+- method tuning config controls variables that are used for tuning during the experiment
 
 
 ## Repo Structure & Description
