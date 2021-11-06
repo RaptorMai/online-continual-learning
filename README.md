@@ -4,7 +4,7 @@
 Official repository of 
 * [Online Class-Incremental Continual Learning with Adversarial Shapley Value](https://arxiv.org/abs/2009.00093) (AAAI 2021)
 * [Supervised Contrastive Replay: Revisiting the Nearest Class Mean Classifier in Online Class-Incremental Continual Learning](https://openaccess.thecvf.com/content/CVPR2021W/CLVision/html/Mai_Supervised_Contrastive_Replay_Revisiting_the_Nearest_Class_Mean_Classifier_in_CVPRW_2021_paper.html) (CVPR2021 Workshop)
-* [Online Continual Learning in Image Classification: An Empirical Survey](https://arxiv.org/pdf/2101.10423.pdf) (Neurocomputing)
+* [Online Continual Learning in Image Classification: An Empirical Survey](https://arxiv.org/pdf/2101.10423.pdf) (Neurocomputing), [Official version](https://authors.elsevier.com/a/1e1YV3INukGu7J)
 
 
 ## Requirements
@@ -204,13 +204,20 @@ If you use this paper/code in your research, please consider citing us:
 
 **Online Continual Learning in Image Classification: An Empirical Survey**
 
-Published in Neurocomputing, preprint on arXiv [here](https://arxiv.org/pdf/2101.10423.pdf).
+Published in Neurocomputing, [official version](https://authors.elsevier.com/a/1e1YV3INukGu7J)<br/>
+Preprint on arXiv [here](https://arxiv.org/pdf/2101.10423.pdf).
+
 ```
-@article{mai2021online,
-  title={Online Continual Learning in Image Classification: An Empirical Survey},
-  author={Mai, Zheda and Li, Ruiwen and Jeong, Jihwan and Quispe, David and Kim, Hyunwoo and Sanner, Scott},
-  journal={arXiv preprint arXiv:2101.10423},
-  year={2021}
+@article{MAI202228,
+title = {Online continual learning in image classification: An empirical survey},
+journal = {Neurocomputing},
+volume = {469},
+pages = {28-51},
+year = {2022},
+issn = {0925-2312},
+doi = {https://doi.org/10.1016/j.neucom.2021.10.021},
+url = {https://www.sciencedirect.com/science/article/pii/S0925231221014995},
+author = {Zheda Mai and Ruiwen Li and Jihwan Jeong and David Quispe and Hyunwoo Kim and Scott Sanner}
 }
 ```
 
