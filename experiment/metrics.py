@@ -22,7 +22,7 @@ def compute_performance(end_task_acc_arr):
     # compute forgetting
     best_acc = np.max(end_task_acc_arr, axis=1)
     final_forgets = best_acc - end_acc
-    avg_fgt = np.mean(final_forgets, axis=1)
+    avg_fgt = np.mean(final_forgets[:, :-1], axis=1)  # Discard the final task when calculating FGT
     avg_end_fgt = (np.mean(avg_fgt), t_coef * sem(avg_fgt))
 
     # compute ACC
